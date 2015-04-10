@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Agile Estimator</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="css/foundation.css" type="test/css">
+    <link rel="stylesheet" href="css/normalize.css" type="test/css">
+    <link rel="stylesheet" href="css/cards.css" type="test/css">
+    <link rel="stylesheet" href="css/chat_window.css" type="test/css">
+  </head>
+
+  <body>
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="#">Agile Estimator</a></h1>
+        </li>
+      </ul>
+
+      <section class="top-bar-section">
+        <ul class="right">
+          <li class="active"><a href="#" id="reveal">Reveal Estimates!</a></li>
+        </ul>
+      </section>
+    </nav>
+
+    <div class="medium-2 columns">
+      <div class="row">
+        <h3>Users</h3>
+        <div id="users"></div>
+      </div>
+    </div>
+
+    <div class="medium-6 columns">
+      <div class="row">
+        <h3>Estimates</h3>
+        <div id="estimates" class="playingCards" style="min-height:300px;"></div>
+
+        <h3>Your Estimate</h3>
+        <div class="playingCards" id="cards">
+          <a class="card value-0" href="#" data-story-points="0">
+            <span class="value">0</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-1" href="#" data-story-points="1">
+            <span class="value">1</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-2" href="#" data-story-points="2">
+            <span class="value">2</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-3" href="#" data-story-points="3">
+            <span class="value">3</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-5" href="#" data-story-points="5">
+            <span class="value">5</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-8" href="#" data-story-points="8">
+            <span class="value">8</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-13" href="#" data-story-points="13">
+            <span class="value">13</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-20" href="#" data-story-points="20">
+            <span class="value">20</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-40" href="#" data-story-points="40">
+            <span class="value">40</span>
+            <span class="middle"></span>
+          </a>
+          <a class="card value-100" href="#" data-story-points="100">
+            <span class="value">100</span>
+            <span class="middle"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="medium-4 columns">
+      <div class="row">
+
+        <div id="chatterbox" style="height:600px; overflow-y:scroll;">
+          <ul id="chatter" class="chatWindow no-bullet"></ul>
+        </div>
+
+        <form>
+          <div class="row collapse">
+            <div class="small-10 columns">
+              <input id="chatinput" type="text" placeholder="Type to send a message">
+            </div>
+            <div class="small-2 columns">
+              <a id="chatsend" href="#" class="button postfix">Send</a>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </body>
+
+  <script>
+    var socket = io();
+
+    socket.on('connect', function(){
+      socket.emit('adduser', prompt("What is your name?"));
+    });
+
+    socket.on('updateusers', function(data){
+      $('#users').empty();
+      $.each(data, function(key, value){
+        $('#users').append('<div>' + key + '</div>');
+      });
+    });
+
+    socket.on('updatechat', function(username, data, type){
+      $('#chatter').append(
+        $('<li/>', {'class': type}).append(
+          '<span class="username">' + username + '</span> ' +
+          '<span class="message">' + data + '</span>'
+        )
+      );
+
+      $('#chatterbox').scrollTop(1E10);
+    });
+
+    socket.on('updateestimates', function(estimators){
+      $('#estimates').empty();
+
+      $.each(estimators, function(index, value){
+        $('#estimates').append(
+          $('<div/>', {'class': 'card back large'}).append(
+            $('<span/>', {'class': 'author', 'text': value})
+          )
+        );
+      });
+    });
+
+    socket.on('reveal', function(estimates){
+      $('#estimates').empty()
+
+      $.each(estimates, function(key, value){
+        var valueClass = "card large value-" + value
+
+        $('#estimates').append(
+          $('<div/>', {'class': valueClass }).append(
+            '<span class="value">' + value + '</span>' +
+            '<span class="middle"></span>'
+          )
+        );
+      });
+    });
+
+    $("#chatinput").focus();
+
+    // Capture Chat click and enter key
+    $(function(){
+      $('#chatsend').click(function(){
+        var message = $('#chatinput').val();
+        $('#chatinput').val('');
+        $('#chatinput').focus();
+
+        socket.emit('sendchat', message);
+      });
+
+      $('#chatinput').keypress(function(e){
+        if(e.which == 13){
+          e.preventDefault();
+          $(this).blur();
+          $('#chatsend').focus().click();
+        }
+      });
+    });
+
+    // Clicking a card
+    $(function(){
+      $('a', '#cards').click(AnchorClick);
+
+      function AnchorClick(){
+        socket.emit('estimate', $(this).data('story-points'))
+      }
+    });
+
+    // Requesting a reveal
+    $(function(){
+      $('#reveal').click(function(){
+        socket.emit('reveal estimates');
+      });
+    });
+  </script>
+</html>

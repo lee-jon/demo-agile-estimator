@@ -1,0 +1,115 @@
+/* Cards */
+
+.playingCards .card {
+  display: inline-block;
+  width: 3.3em;
+  height: 4.6em;
+  border: 1px solid #666;
+  border-radius: .3em;
+  -moz-border-radius: .3em;
+  -webkit-border-radius: .3em;
+  -khtml-border-radius: .3em;
+  padding: .25em;
+  margin: 0, .5em ,5em 0;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: normal;
+  position: relative;
+  background-color: #fff;
+  -moz-box-shadow: .1em .1em .5em #333;
+  -webkit-box-shadow: .1em .1em .5em #333;
+  box-shadow: .1em .1em .5em #333;
+}
+
+.playingCards a.card {
+  text-decoration: none;
+}
+
+/* Selected and hover states */
+.playingCards a.card:hover, .playingCards a.card:active, .playingCards a.card:focus {
+  background-color: #fff;
+  bottom: 1em;
+}
+
+.playingCards a.card:focus {
+  color: #a00;
+}
+
+.playingCards a.card {
+  background-color: #eee;
+}
+
+/* Inside face & data */
+.playingCards .card .value,
+.playingCards .card .middle {
+  display: block;
+  line-height: 1;
+  text-align: left;
+}
+.playingCards .card .middle {
+  line-height: .7;
+}
+
+.playingCards .card .middle:after {
+  display: block;
+  text-align: center;
+  white-space: pre;
+  line-height: .8;
+  font-size: 1.1em;
+  word-spacing: -.05em;
+}
+
+.playingCards .card.value-0 .middle:after {
+  content: "\A\25CC\A\A";
+}
+
+.playingCards .card.value-1 .middle:after {
+  content: "\A\25CF\A\A";
+}
+
+.playingCards .card.value-2 .middle:after {
+  content: "\25CF \A\A \25CF";
+}
+
+.playingCards .card.value-3 .middle:after {
+  content: "\25CF \A\25CF \A\25CF";
+}
+
+.playingCards .card.value-5 .middle:after {
+  content: "\25CF\00A0\00A0\00A0\25CF \A\25CF \A\25CF\00A0\00A0\00A0\25CF";
+}
+
+.playingCards .card.value-8 .middle:after {
+  content: "\25CF\00A0\25CF\00A0\25CF \A\25CF\00A0\00A0\25CF \A\25CF\00A0\25CF\00A0\25CF";
+}
+
+.playingCards .card.value-13 .middle:after {
+  word-spacing: -0.44em;
+  content: "\25CF\00A0\25CF\00A0\25CF\00A0\25CF \A\25CF\00A0\25CF\00A0\25CF\00A0\25CF\00A0\25CF \A\25CF\00A0\25CF\00A0\25CF\00A0\25CF";
+}
+
+.playingCards .card.value-20 .middle:after,
+.playingCards .card.value-40 .middle:after,
+.playingCards .card.value-100 .middle:after {
+  content: "\A\2613\A\A";
+}
+
+/* Back of cards */
+.playingCards .card.back {
+  background-color: #00587c;
+}
+.playingCards .card.back .author {
+  display: inline-block;
+  color: #ccc;
+  font-size: 0.6em;
+  vertical-align: top;
+  text-align: center;
+}
+
+/* Larger Cards */
+.playingCards .card.large {
+  font-size: 1.8em;
+}
+.playingCards .card.large .author {
+  font-size: 0.4em;
+}
