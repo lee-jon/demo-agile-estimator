@@ -1,7 +1,12 @@
 <!doctype html>
 <html>
 <head>
-  <link rel="stylesheet" href="cards_cut.css" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="css/normalize.css" type="text/css">
+  <link rel="stylesheet" href="css/foundation.css" type="text/css">
+  <link rel="stylesheet" href="css/cards.css" type="text/css">
+  <link rel="stylesheet" href="css/card_transforms.css" type="text/css">
 </head>
 <body>
   <h1>Estimates</h1>
@@ -9,6 +14,7 @@
     <span class="card back large">
       <span class="author">Dave Rorchache</span>
     </span>
+
     <a class="card back large">
       <span class="author">Ben Burn</span>
     </a>
@@ -35,6 +41,22 @@
       <span class="middle"></span>
     </a>
   </a>
+
+  <h1>CSS Transforms</h1>
+  <div class="playingCards">
+    <div class="estimated">
+      <div class="flipper" ontouchstart="this.classList.toggle('hover');">
+        <div class="card back large">
+          <span class="author">Simon Kaye</span>
+        </div>
+        <div class="card front large value-3">
+          <span class="value">3</span>
+          <span class="middle"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <h1>Your Estimate</h1>
   <a class="playingCards">
@@ -80,4 +102,10 @@
     </a>
   </a>
 </body>
+
+<script>
+  $('.estimated').each(function() {
+    $(this).addClass('active');
+  });
+</script>
 </html>

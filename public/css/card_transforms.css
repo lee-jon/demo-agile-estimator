@@ -1,0 +1,39 @@
+/* Card transformations */
+.playingCards{
+  perspective: 1000;
+}
+
+.estimated {
+  width: 95px;
+  height: 150px;
+  float: left;
+}
+
+.estimated:hover  .flipper,
+.estimated.hover  .flipper {
+  transform: rotateY(180deg);
+}
+
+.flipper {
+  transition: 0.6s;
+  transform-style: preserve-3d;
+
+  position: relative;
+}
+
+.estimated .front,
+.estimated .back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.estimated .front {
+  transform: rotateY(0deg);
+}
+
+.estimated .back {
+  z-index: 2;
+  transform: rotateY(180deg);
+}

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/foundation.css" type="text/css">
     <link rel="stylesheet" href="css/normalize.css" type="text/css">
     <link rel="stylesheet" href="css/cards.css" type="text/css">
+    <link rel="stylesheet" href="css/card_transforms.css" type="text/css">
     <link rel="stylesheet" href="css/chat_window.css" type="text/css">
   </head>
 
@@ -112,6 +113,8 @@
 
     socket.on('connect', function(){
       socket.emit('adduser', prompt("What is your name?"));
+
+      $("#chatinput").focus();
     });
 
     socket.on('updateusers', function(data){
@@ -148,18 +151,28 @@
       $('#estimates').empty()
 
       $.each(estimates, function(key, value){
-        var valueClass = "card large value-" + value
-
         $('#estimates').append(
-          $('<div/>', {'class': valueClass }).append(
-            '<span class="value">' + value + '</span>' +
-            '<span class="middle"></span>'
-          )
+          largeCardCreator(key, value)
         );
       });
     });
 
-    $("#chatinput").focus();
+    function largeCardCreator(user, value){
+      var card = '<div class="estimated">' +
+        '<div class="flipper" ontouchstart="this.classList.toggle("hover");">' +
+          '<div class="card back large">' +
+            '<span class="author">' + user + '</span>' +
+          '</div>' +
+          '<div class="card front large value-' + value + '">' +
+            '<span class="value">' + value + '</span>' +
+            '<span class="middle"></span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+      return card
+    };
+
 
     // Capture Chat click and enter key
     $(function(){
