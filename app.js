@@ -57,9 +57,10 @@ io.on('connection', function(socket){
 
   socket.on('disconnect', function(){
     console.log('DISCONNECTION of user ' + socket.username);
-
-    delete rooms[socket.room]['usernames'][socket.username];
-    delete rooms[socket.room]['estimates'][socket.username];
+    if( socket.room in rooms) {
+      delete rooms[socket.room]['usernames'][socket.username];
+      delete rooms[socket.room]['estimates'][socket.username];
+    }
 
     io.sockets.to(socket.room).emit('updateusers', rooms[socket.room]['usernames']);
     io.sockets.to(socket.room).emit('updateestimates', Object.keys(rooms[socket.room]['estimates']));
@@ -89,8 +90,9 @@ io.on('connection', function(socket){
     console.log(socket.username + ' has estimated ' + estimate)
 
     rooms[socket.room]['estimates'][socket.username] = estimate
-    socket.to(socket.room).emit('updatechat', 'SERVER', 'You sent an estimate', 'update');
-    socket.to(socket.room).broadcast.emit('updatechat', socket.username, 'sent an estimate', 'estimate');
+    socket.emit('updatechat', 'SERVER', 'You sent an estimate of '+ estimate, 'update');
+    //socket.to(socket.room).broadcast.emit('updatechat', socket.username, 'sent an estimate', 'estimate');
+    socket.broadcast.to(socket.room).emit('updatechat', socket.username, 'send an estimate', 'estimate');
 
     io.sockets.to(socket.room).emit('updateestimates', Object.keys(rooms[socket.room]['estimates']));
   });
